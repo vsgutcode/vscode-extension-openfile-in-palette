@@ -1,0 +1,99 @@
+{
+  "name": "openfile-in-palette",
+  "displayName": "openfile-in-palette",
+  "description": "",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.72.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:openfile-in-palette.openfile"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "openfile-in-palette.openfile",
+        "title": "openfile-in-palette: openfile"
+      }
+    ],
+    "configuration": [
+      {
+        "id": "openfile-in-palette.configuration",
+        "title": "Configuration openfile-in-palette",
+        "properties": {
+          "conf.settingsEditor.numericObjectSetting": {
+            "type": "object",
+            "description": "An example numeric object setting.",
+            "properties": {
+              "intprop": {
+                "type": "integer",
+                "description": "Integer property"
+              },
+              "numprop": {
+                "type": "number",
+                "description": "Numeric property"
+              }
+            },
+            "additionalProperties": false
+          },
+          "conf.templates.openfile-in-palette.enable": {
+            "type": "boolean",
+            "default": true,
+            "description": "Create file with template.",
+            "scope": "resource"
+          },
+          "conf.templates.openfile-in-palette.map": {
+            "type": "object",
+            "default": {
+              ".c": {
+                "snippet": "#include <stdio.h>\nint main(int argc, char const *argv[]){\n    $0\n    return 0;\n}\n"
+              },
+              ".cpp": {
+                "snippet": "#include <iostream>\nusing namespace std;\nint main(int argc, char const *argv[]){\n    $0\n    return 0;\n}\n"
+              },
+              ".h": {
+                "snippet": "#ifndef ${TM_FILENAME/([\\.-])|([^\\.-]+)/${1:+_}${2:/upcase}/gm}_INC_SEEN\n#define ${TM_FILENAME/([\\.-])|([^\\.-]+)/${1:+_}${2:/upcase}/gm}_INC_SEEN\n\n$0\n\n#endif // ${TM_FILENAME/([\\.-])|([^\\.-]+)/${1:+_}${2:/upcase}/gm}_INC_SEEN\n"
+              },
+              ".ts": {
+                "snippet": "import * as fs from 'fs'\n$0\n"
+              }
+            },
+            "description": "Create file with template. Use user snipets as template.See https://code.visualstudio.com/docs/editor/userdefinedsnippets#_snippet-syntax",
+            "scope": "resource"
+          }
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.2.0",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.71.0",
+    "@typescript-eslint/eslint-plugin": "^5.31.0",
+    "@typescript-eslint/parser": "^5.31.0",
+    "@vscode/test-electron": "^2.1.5",
+    "eslint": "^8.20.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.0.0",
+    "ts-loader": "^9.3.1",
+    "typescript": "^4.7.4",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
+  }
+}
