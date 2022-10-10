@@ -2,7 +2,11 @@
   "name": "openfile-in-palette",
   "displayName": "openfile-in-palette",
   "description": "",
-  "version": "0.0.1",
+  "keywords": ["open", "create", "template", "palette", "path", "suggest"],
+  "author": {"url": "https://github.com/vsgutcode/vscode-extension-openfile-in-palette", "name": "hmasa"},
+  "repository": {"url": "https://github.com/vsgutcode/vscode-extension-openfile-in-palette"},
+  "publisher": "vsgutcode",
+  "version": "0.0.4",
   "engines": {
     "vscode": "^1.72.0"
   },
@@ -23,30 +27,15 @@
     "configuration": [
       {
         "id": "openfile-in-palette.configuration",
-        "title": "Configuration openfile-in-palette",
+        "title": "openfile-in-palette",
         "properties": {
-          "conf.settingsEditor.numericObjectSetting": {
-            "type": "object",
-            "description": "An example numeric object setting.",
-            "properties": {
-              "intprop": {
-                "type": "integer",
-                "description": "Integer property"
-              },
-              "numprop": {
-                "type": "number",
-                "description": "Numeric property"
-              }
-            },
-            "additionalProperties": false
-          },
-          "conf.templates.openfile-in-palette.enable": {
+          "openfile-in-palette.templates.enable": {
             "type": "boolean",
             "default": true,
             "description": "Create file with template.",
             "scope": "resource"
           },
-          "conf.templates.openfile-in-palette.map": {
+          "openfile-in-palette.templates.map": {
             "type": "object",
             "default": {
               ".c": {

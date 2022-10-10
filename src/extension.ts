@@ -403,7 +403,7 @@ export function activate(context: vscode.ExtensionContext) {
 				// 新規ファイル。
 				mylog('accept.3:');
 				//vscode.window.showInformationMessage(newpath); // ここでawaitすると、message windowを消すまで以下が実行されない。
-				let conf_useTemplate = vscode.workspace.getConfiguration().get<boolean>('conf.templates.openfile-in-palette.enable');
+				let conf_useTemplate = vscode.workspace.getConfiguration().get<boolean>('openfile-in-palette.templates.enable');
 				//let conf_useTemplate = vscode.workspace.getConfiguration().get<boolean>('conf.templates.fip.enable');
 				type ssmap = {
 					//[k:string]:string;
@@ -412,7 +412,7 @@ export function activate(context: vscode.ExtensionContext) {
 						//args?:string[]
 					};
 				};
-				let snipetmap = vscode.workspace.getConfiguration().get<ssmap>('conf.templates.openfile-in-palette.map');
+				let snipetmap = vscode.workspace.getConfiguration().get<ssmap>('openfile-in-palette.templates.map');
 				let snipet = snipetmap && snipetmap[extension];
 
 				if(conf_useTemplate && snipet)
