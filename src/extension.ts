@@ -301,17 +301,30 @@ export function activate(context: vscode.ExtensionContext) {
 			qp.value = nstr;
 			mylog('change:', nstr);
 			let dirarray = getdirarray(nstr);
-			if(nstr === currentdir)return; // 何も変化なし。最初にここにくる。
+			if(nstr === currentdir){
+				mylog('change.0:');
+				if(userinputname){ // パスを右から削除していくときに、新規ファイルの提案が作成されてしまう。それを削除する。
+					currentitems = currentitems.filter(v=>{return !(v[0] === userinputname && v[1] === vscode.FileType.Unknown)});
+					userinputname = '';
+					qp.items = items2III(currentitems, currentdir);;
+				}
+				return; // 何も変化なし。最初にここにくる。
+			}
 			let samedirname = nstr.startsWith(currentdir);
 			if(samedirname){
 				// 変わったのはitem
 				if(nstr.endsWith('/')){
+					mylog('change.1:');
 					if(hasStar(nstr)){
 						// *付きでディレクトリを指定しようとしたなら、阻止する。
 						qp.value = currentdir;
 						return;
 					}
-					mylog('change.1:');
+					if(userinputname){ // パスを右から削除していくときに、新規ファイルの提案が作成されてしまう。それを削除する。
+						//currentitems = currentitems.filter(v=>{return !(v[0] === userinputname && v[1] === vscode.FileType.Unknown)});
+						userinputname = '';
+					}
+					mylog('change.1.1:');
 					// ディレクトリを指定。
 					//let dirname2 = getdirname(nstr);
 					let dirname2 = getdirname(nstr, true);
@@ -377,7 +390,7 @@ export function activate(context: vscode.ExtensionContext) {
 				diritems_cache.clear(); // cacheのクリア
 				mylog('----[[[[ hide.CLEAR CACHE ]]]]----')
 			}
-	});
+		});
 		qp.onDidAccept(async () => {
 			let a = qp.selectedItems[0];
 			//currentitems[a.label]
