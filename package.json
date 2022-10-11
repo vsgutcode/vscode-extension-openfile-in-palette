@@ -1,12 +1,12 @@
 {
   "name": "openfile-in-palette",
   "displayName": "openfile-in-palette",
-  "description": "",
+  "description": "This extension allows you to open existing files and create new files from the palette.",
   "keywords": ["open", "create", "template", "palette", "path", "suggest"],
   "author": {"url": "https://github.com/vsgutcode/vscode-extension-openfile-in-palette", "name": "hmasa"},
   "repository": {"url": "https://github.com/vsgutcode/vscode-extension-openfile-in-palette"},
   "publisher": "vsgutcode",
-  "version": "0.0.4",
+  "version": "0.0.7",
   "engines": {
     "vscode": "^1.72.0"
   },

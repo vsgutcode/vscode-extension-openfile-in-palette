@@ -5,6 +5,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 import internal = require('stream');
+import * as os from 'os';
 //import internal = require('stream');
 
 
@@ -116,7 +117,9 @@ export function activate(context: vscode.ExtensionContext) {
 			mylog('resolve.1', ps);
 			//let str2 = ps.join('/').slice(1); // 先頭のスラッシュはいらない。
 			let str2 = ps.join('/') + '/'; // 先頭のスラッシュはいらない。
-			
+			if(os.type() !== 'Windows_NT'){
+				str2 = '/' + str2;
+			}
 			let str3 = normalize(path.resolve(str2));
 			if(endSlash && !str3.endsWith('/'))str3 += '/';
 			mylog('resolve.2:', str3);

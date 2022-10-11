@@ -40,7 +40,7 @@ This extension contributes the following settings:
 
 Users appreciate release notes as you update your extension.
 
-### 0.0.1
+### 0.0.7
 
-Initial release.
+Fix for linux.
 
