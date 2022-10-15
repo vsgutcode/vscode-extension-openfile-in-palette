@@ -40,6 +40,10 @@ This extension contributes the following settings:
 
 Users appreciate release notes as you update your extension.
 
+### 0.0.8
+
+Add vsix installer for opening .vsix.
+
 ### 0.0.7
 
 Fix for linux.
