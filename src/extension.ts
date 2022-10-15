@@ -17,7 +17,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// This line of code will only be executed once when your extension is activated
 	function mylog(arg:any, ...args:any[]){
 		//console.trace()
-		//console.log(arg, ...args);
+		// console.log(arg, ...args);
 	}
 	mylog('Congratulations, your extension "openfile-in-palette" is now active!');
 
@@ -297,6 +297,45 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 			return eq;
 		}
+		function execTerminal(cmds:string[], dpath: string){
+			const term = vscode.window.createTerminal ({name: 'vsix-install-from-net', cwd:dpath});
+			//await term.processId;
+			term.show(false);
+			for(let cmdstr of cmds){
+				term.sendText(cmdstr);
+			}
+			term.sendText('exit');
+			return new Promise((resolve, reject) => {
+				let disposeToken = vscode.window.onDidCloseTerminal((closeterm) => {
+					if(closeterm === term){
+						disposeToken.dispose();
+						if(term.exitStatus !== undefined){
+							resolve(term.exitStatus);
+						}else{
+							reject('terminal exit with undefined status.');
+						}
+					}
+				});
+			})
+		}
+		async function installVSIX(vsixname:string, dpath:string){
+			let msg = `install ${vsixname}?`;
+			let sel = await vscode.window.showQuickPick(['yes', 'no'], {title: msg,});
+			if(sel !== 'yes')return;
+			mylog('dl_and_install.7');
+			let cmdstr_install = [
+				//`echo "INSTALL"`,
+				//'pushd',
+				//'cd $env:temp/vscode-extension-vsix-install-from-net',
+				//`ls ${vsixname}`,
+				//`cd ${dpath}`,
+				`code --install-extension ${vsixname}`,
+				//'popd',
+			]
+			let exitStatus = await execTerminal(cmdstr_install, dpath);
+			mylog('dl_and_install.8', exitStatus);
+			vscode.window.showInformationMessage('success install.');
+		}
 		let userinputname:string = '';
 		//qp.onDidChangeActive
 		qp.onDidChangeValue(async str => {
@@ -475,17 +514,27 @@ export function activate(context: vscode.ExtensionContext) {
 			}else if(type === vscode.FileType.File){
 				// 既存ファイルの読み込み。
 				{
-					// let uri = vscode.Uri.parse(newpath); // parseに、c:/saru/desu.txtをいれると、schema:c, path: /saru/desu.txtになる。
-					let uri = vscode.Uri.file(newpath);
-					mylog('accept.4', uri);
+					if(extension.toLowerCase() === '.vsix'){
+						// vsixの時だけ、特別にinstallコマンドになる。
+						await installVSIX(itemname, currentdir);
+					}else{
+						// let uri = vscode.Uri.parse(newpath); // parseに、c:/saru/desu.txtをいれると、schema:c, path: /saru/desu.txtになる。
+						let uri = vscode.Uri.file(newpath);
+						mylog('accept.4', uri);
 
-					let doc = await vscode.workspace.openTextDocument();
-					//vscode.window.showTextDocument(uri, { viewColumn: vscode.ViewColumn.Beside });
-					vscode.window.showTextDocument(uri);
+						if(1){
+							let doc = await vscode.workspace.openTextDocument();
+							//vscode.window.showTextDocument(uri, { viewColumn: vscode.ViewColumn.Beside });
+							vscode.window.showTextDocument(uri);
+						}else{
+							let doc = await vscode.workspace.openTextDocument(uri);
+							vscode.window.showTextDocument(doc);
+						}
 
-					if(diritems_cache.size){
-						diritems_cache.clear(); // cacheのクリア
-						mylog('----[[[[ accept.CLEAR CACHE ]]]]----')
+						if(diritems_cache.size){
+							diritems_cache.clear(); // cacheのクリア
+							mylog('----[[[[ accept.CLEAR CACHE ]]]]----')
+						}
 					}
 				}
 
