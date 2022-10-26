@@ -6,7 +6,7 @@
   "author": {"url": "https://github.com/vsgutcode/vscode-extension-openfile-in-palette", "name": "hmasa"},
   "repository": {"url": "https://github.com/vsgutcode/vscode-extension-openfile-in-palette"},
   "publisher": "vsgutcode",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "engines": {
     "vscode": "^1.72.0"
   },

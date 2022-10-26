@@ -89,7 +89,8 @@ export function activate(context: vscode.ExtensionContext) {
 			*/
 		}
 		function gethome(){
-			let userhome = process.env[process.platform == "win32" ? "USERPROFILE" : "HOME"];
+			// let userhome = process.env[process.platform == "win32" ? "USERPROFILE" : "HOME"];
+			let userhome = os.homedir();
 			return userhome!;
 		}
 		function getresolve(str:string){
