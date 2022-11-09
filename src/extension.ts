@@ -21,7 +21,14 @@ export function activate(context: vscode.ExtensionContext) {
 	}
 	mylog('Congratulations, your extension "openfile-in-palette" is now active!');
 
-	// The command has been defined in the package.json file
+	function normalize(pathname:string) : string{
+		//return pathname.replace('\\\\', '/');
+		//return pathname.replaceAll('\\', '/');
+		//return pathname.replace(/\\/g, '/');
+		return pathname.replace(/\\/g, '/');
+		//return path.resolve(pathname).replace(/\\/g, '/');
+	}
+// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
 	let disposable = vscode.commands.registerCommand('openfile-in-palette.openfile', async () => {
@@ -68,13 +75,6 @@ export function activate(context: vscode.ExtensionContext) {
 		qp.matchOnDescription = true;
 		qp.step = undefined;
 		//qp.selectedItems
-		function normalize(pathname:string) : string{
-			//return pathname.replace('\\\\', '/');
-			//return pathname.replaceAll('\\', '/');
-			//return pathname.replace(/\\/g, '/');
-			return pathname.replace(/\\/g, '/');
-			//return path.resolve(pathname).replace(/\\/g, '/');
-		}
 		async function isdir(dir : string){
 			if(!fs.existsSync(dir))return false;
 			return true;
@@ -591,7 +591,78 @@ export function activate(context: vscode.ExtensionContext) {
 		//ib.show();
 	});
 
-	context.subscriptions.push(disposable);
+	async function duplicateOrRename(isDuplicate :boolean) : Promise<boolean>{
+		let cmdname = isDuplicate ? 'duplicate' : 'rename';
+		let uri = vscode.window.activeTextEditor?.document.uri;
+		if(!uri)return false;
+		let oldpath = uri.fsPath;
+		oldpath = normalize(oldpath);
+		let pos0 = oldpath.lastIndexOf('/') + 1;
+		let pos1 = oldpath.length;
+		let newname = await vscode.window.showInputBox({
+			title: cmdname,
+			prompt: 'input new filename',
+			placeHolder: `${uri.path}`,
+			value: oldpath,
+			valueSelection: [pos0, pos1]
+		});
+		if(!newname)return false;
+		if(fs.existsSync(newname)){
+			vscode.window.showInformationMessage(`${newname} is exist. cannot ${cmdname}.`);
+			return false;
+		};
+		let newuri = uri.with({path:newname});
+
+		if(isDuplicate){
+			await vscode.workspace.fs.copy(uri, newuri, { overwrite: true });
+			let needOpen = await vscode.window.showQuickPick(['yes', 'no'], {
+				canPickMany:false,
+				title: `open ${newname} ?`,
+				placeHolder: `open ${newname} ?`,
+			});
+			if(needOpen){
+				vscode.workspace.openTextDocument(newuri).then(document => {
+					vscode.window.showTextDocument(document);
+				});
+			}
+		}else{
+			const edit = new vscode.WorkspaceEdit();
+			edit.renameFile(uri, newuri, { overwrite: true });
+			let success = await vscode.workspace.applyEdit(edit);
+			if(!success){
+				vscode.window.showInformationMessage(`failed ${cmdname}.`);
+				return false;
+			}
+		}
+		return true;
+	}
+
+
+	let disposable2 = vscode.commands.registerCommand('openfile-in-palette.rename', async () => {
+		duplicateOrRename(false);
+	});
+
+	let disposable3 = vscode.commands.registerCommand('openfile-in-palette.duplicate', async () => {
+		duplicateOrRename(true);
+	});
+
+
+	let disposable4 = vscode.commands.registerCommand('openfile-in-palette.duplicate_or_rename', async () => {
+		let action = await vscode.window.showQuickPick(['duplicate', 'rename'], {
+			canPickMany: false,
+			title: 'select duplicate or rename.',
+			placeHolder: 'select duplicate or rename.',
+		});
+		console.log(action);
+		if(action === 'duplicate'){
+			duplicateOrRename(true);
+		}else{
+			duplicateOrRename(false);
+		}
+	});
+
+
+	context.subscriptions.push(disposable, disposable2, disposable3, disposable4);
 }
 
 // this method is called when your extension is deactivated

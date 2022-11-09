@@ -12,6 +12,8 @@ This extension allows you to open existing files and create new files from the p
   + ~ : Home
   + .. : Parent Directory
   + \* : For example, ~/*.cpp.
+* Rename file.
+* Duplicate file.
 
 ## Usage
 
@@ -39,6 +41,10 @@ This extension contributes the following settings:
 ## Release Notes
 
 Users appreciate release notes as you update your extension.
+
+### 0.0.10
+
+Add rename and duplicate file command.
 
 ### 0.0.9
 

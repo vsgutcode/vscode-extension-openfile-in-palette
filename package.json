@@ -6,7 +6,7 @@
   "author": {"url": "https://github.com/vsgutcode/vscode-extension-openfile-in-palette", "name": "hmasa"},
   "repository": {"url": "https://github.com/vsgutcode/vscode-extension-openfile-in-palette"},
   "publisher": "vsgutcode",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "engines": {
     "vscode": "^1.72.0"
   },
@@ -14,7 +14,10 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:openfile-in-palette.openfile"
+    "onCommand:openfile-in-palette.openfile",
+    "onCommand:openfile-in-palette.rename",
+    "onCommand:openfile-in-palette.duplicate",
+    "onCommand:openfile-in-palette.duplicate_or_rename"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -22,6 +25,18 @@
       {
         "command": "openfile-in-palette.openfile",
         "title": "openfile-in-palette: openfile"
+      },
+      {
+        "command": "openfile-in-palette.rename",
+        "title": "openfile-in-palette: rename"
+      },
+      {
+        "command": "openfile-in-palette.duplicate",
+        "title": "openfile-in-palette: duplicate"
+      },
+      {
+        "command": "openfile-in-palette.duplicate_or_rename",
+        "title": "openfile-in-palette: duplicate_or_rename"
       }
     ],
     "configuration": [
@@ -44,11 +59,17 @@
               ".cpp": {
                 "snippet": "#include <iostream>\nusing namespace std;\nint main(int argc, char const *argv[]){\n    $0\n    return 0;\n}\n"
               },
+              ".ixx": {
+                "snippet": "#include <iostream>\nusing namespace std;\nint main(int argc, char const *argv[]){\n    $0\n    return 0;\n}\n"
+              },
               ".h": {
                 "snippet": "#ifndef ${TM_FILENAME/([\\.-])|([^\\.-]+)/${1:+_}${2:/upcase}/gm}_INC_SEEN\n#define ${TM_FILENAME/([\\.-])|([^\\.-]+)/${1:+_}${2:/upcase}/gm}_INC_SEEN\n\n$0\n\n#endif // ${TM_FILENAME/([\\.-])|([^\\.-]+)/${1:+_}${2:/upcase}/gm}_INC_SEEN\n"
               },
               ".ts": {
                 "snippet": "import * as fs from 'fs'\n$0\n"
+              },
+              ".py": {
+                "snippet": "#coding:utf8\n\nif '__main__' == __name__:\n    $0\n    pass\n"
               }
             },
             "description": "Create file with template. Use user snipets as template.See https://code.visualstudio.com/docs/editor/userdefinedsnippets#_snippet-syntax",
