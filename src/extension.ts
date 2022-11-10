@@ -202,6 +202,12 @@ export function activate(context: vscode.ExtensionContext) {
 			let ret1 : [string, vscode.FileType][] = files.map(v => [v, vscode.FileType.File]);
 			let ret2 : [string, vscode.FileType][] = syms.map(v => [v, vscode.FileType.SymbolicLink]);
 			let ret = ret0.concat(ret1).concat(ret2);
+			if(1){
+				// dotted処理(dotの有無でソートする)
+				let nodot = ret.filter(([name, type]) => !name.startsWith('.'));
+				let dot = ret.filter(([name, type]) => name.startsWith('.'));
+				ret = nodot.concat(dot);
+			}
 			//fs.opendirSync(dir);
 			//let yyy = xxx.map(v => fs.statSync(path.join(dir, v)));
 			//mylog(ret);
@@ -480,23 +486,33 @@ export function activate(context: vscode.ExtensionContext) {
 						//const newFile = vscode.Uri.parse('untitled:' + path.join(vscode.workspace.rootPath, 'safsa.txt'));
 						const newFile = vscode.Uri.parse('untitled:' + newpath);
 						vscode.workspace.openTextDocument(newFile).then(document => {
-							let edit = new vscode.WorkspaceEdit();
-							{
-								// ここでsetしても、snippetの変数が展開されない。
-								//edit.set(newFile, [vscode.SnippetTextEdit.insert(new vscode.Position(0,0), snippetString)]);
-								//edit.insert(newFile, new vscode.Position(0, 0), "Hello world!");
-							}
-							return vscode.workspace.applyEdit(edit).then(success => {
-								if (success) {
-									//vscode.window.activeTextEditor?.insertSnippet(snippetString);
-									vscode.window.showTextDocument(document).then(editor => {
-										let snippetString = new vscode.SnippetString(snipet!.snippet);
-										editor.insertSnippet(snippetString); // activeEditorにのみsnippetを適用でき、変数が展開される。
-									});
-								} else {
-									vscode.window.showInformationMessage('Error!');
+							if(0){
+								let edit = new vscode.WorkspaceEdit();
+								{
+									// ここでsetしても、snippetの変数が展開されない。
+									let sniStr = new vscode.SnippetString(snipet?.snippet);
+									edit.set(newFile, [vscode.SnippetTextEdit.insert(new vscode.Position(0,0), sniStr)]);
+									//edit.insert(newFile, new vscode.Position(0, 0), "Hello world!");
 								}
-							});
+								return vscode.workspace.applyEdit(edit).then(success => {
+									if (success) {
+										//vscode.window.activeTextEditor?.insertSnippet(snippetString);
+										vscode.window.showTextDocument(document).then(editor => {
+											if(0){
+												let snippetString = new vscode.SnippetString(snipet!.snippet);
+												editor.insertSnippet(snippetString); // activeEditorにのみsnippetを適用でき、変数が展開される。
+											}
+										});
+									} else {
+										vscode.window.showInformationMessage('Error!');
+									}
+								});
+							}else{
+								vscode.window.showTextDocument(document).then(editor => {
+									let snippetString = new vscode.SnippetString(snipet!.snippet);
+									editor.insertSnippet(snippetString); // activeEditorにのみsnippetを適用でき、変数が展開される。
+								});
+							}
 						});
 
 					}else{

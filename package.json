@@ -6,7 +6,7 @@
   "author": {"url": "https://github.com/vsgutcode/vscode-extension-openfile-in-palette", "name": "hmasa"},
   "repository": {"url": "https://github.com/vsgutcode/vscode-extension-openfile-in-palette"},
   "publisher": "vsgutcode",
-  "version": "0.0.10",
+  "version": "0.0.12",
   "engines": {
     "vscode": "^1.72.0"
   },
@@ -60,7 +60,7 @@
                 "snippet": "#include <iostream>\nusing namespace std;\nint main(int argc, char const *argv[]){\n    $0\n    return 0;\n}\n"
               },
               ".ixx": {
-                "snippet": "#include <iostream>\nusing namespace std;\nint main(int argc, char const *argv[]){\n    $0\n    return 0;\n}\n"
+                "snippet": "module;\n#include <iostream>\n\nexport module $TM_FILENAME_BASE;\n\nusing namespace std;\n\nint main(int argc, char const *argv[]){\n    $0\n    return 0;\n}\n"
               },
               ".h": {
                 "snippet": "#ifndef ${TM_FILENAME/([\\.-])|([^\\.-]+)/${1:+_}${2:/upcase}/gm}_INC_SEEN\n#define ${TM_FILENAME/([\\.-])|([^\\.-]+)/${1:+_}${2:/upcase}/gm}_INC_SEEN\n\n$0\n\n#endif // ${TM_FILENAME/([\\.-])|([^\\.-]+)/${1:+_}${2:/upcase}/gm}_INC_SEEN\n"

@@ -42,6 +42,14 @@ This extension contributes the following settings:
 
 Users appreciate release notes as you update your extension.
 
+### 0.0.12
+
+Fix template.
+
+### 0.0.11
+
+The completion list is now sorted by the presence or absence of a leading dot.
+
 ### 0.0.10
 
 Add rename and duplicate file command.
