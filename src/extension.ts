@@ -574,9 +574,18 @@ export function activate(context: vscode.ExtensionContext) {
 			// }
 
 		});
-		//mylog(path.delimiter, path.sep, path.win32);
-		//let userhome = process.env[process.platform == "win32" ? "USERPROFILE" : "HOME"];
-		let userhome = gethome();
+
+
+		// 最初にworkspaceかどうかをみる。もしworkspaceがなければhomeをとる。
+		let workspace_dir;
+		if(vscode.workspace.workspaceFolders?.length){
+			let uri = vscode.workspace.workspaceFolders[0].uri;
+			workspace_dir = uri.fsPath;
+		}
+		
+		let userhome = workspace_dir ?? gethome();
+		// let userhome = gethome();
+
 		let initfilepath = vscode.window.activeTextEditor?.document.uri.fsPath;
 		let initpath;
 		if(initfilepath){
@@ -586,7 +595,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}else{
 			initpath = userhome;
 		}
-		//path.join(userhome, xxxx);
+
 		mylog(process.env);
 		currentdir = normalize(initpath!);
 		currentDirArray = getdirarray(initpath!);

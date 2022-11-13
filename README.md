@@ -42,6 +42,10 @@ This extension contributes the following settings:
 
 Users appreciate release notes as you update your extension.
 
+### 0.0.13
+
+Add workspace folder. When a folder is open, the folder path takes precedence over the home dir.
+
 ### 0.0.12
 
 Fix template.
